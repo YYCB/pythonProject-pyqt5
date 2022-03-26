@@ -1,0 +1,92 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'untitled.ui'
+#
+# Created by: PyQt5 UI code generator 5.9.2
+#
+# WARNING! All changes made in this file will be lost!
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+class Ui_MainWindow(object):
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(1057, 809)
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)
+        self.gridLayout_2.setObjectName("gridLayout_2")
+        self.tabWidget = QtWidgets.QTabWidget(self.centralwidget)
+        self.tabWidget.setObjectName("tabWidget")
+        self.tab = QtWidgets.QWidget()
+        self.tab.setObjectName("tab")
+        self.gridLayout_7 = QtWidgets.QGridLayout(self.tab)
+        self.gridLayout_7.setObjectName("gridLayout_7")
+        self.gridLayout_5 = QtWidgets.QGridLayout()
+        self.gridLayout_5.setObjectName("gridLayout_5")
+        self.gridLayout_4 = QtWidgets.QGridLayout()
+        self.gridLayout_4.setObjectName("gridLayout_4")
+        self.pushButton_2 = QtWidgets.QPushButton(self.tab)
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.gridLayout_4.addWidget(self.pushButton_2, 0, 0, 1, 1)
+        self.pushButton_3 = QtWidgets.QPushButton(self.tab)
+        self.pushButton_3.setObjectName("pushButton_3")
+        self.gridLayout_4.addWidget(self.pushButton_3, 1, 0, 1, 1)
+        self.gridLayout_5.addLayout(self.gridLayout_4, 1, 3, 1, 1)
+        self.textBrowser_2 = QtWidgets.QTextBrowser(self.tab)
+        self.textBrowser_2.setObjectName("textBrowser_2")
+        self.gridLayout_5.addWidget(self.textBrowser_2, 0, 3, 1, 1)
+        self.textBrowser = QtWidgets.QTextBrowser(self.tab)
+        self.textBrowser.setObjectName("textBrowser")
+        self.gridLayout_5.addWidget(self.textBrowser, 0, 2, 1, 1)
+        self.gridLayout_7.addLayout(self.gridLayout_5, 0, 0, 1, 1)
+        self.tabWidget.addTab(self.tab, "")
+        self.tab_2 = QtWidgets.QWidget()
+        self.tab_2.setObjectName("tab_2")
+        self.tabWidget.addTab(self.tab_2, "")
+        self.gridLayout_2.addWidget(self.tabWidget, 0, 1, 1, 1)
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.dockWidget = QtWidgets.QDockWidget(MainWindow)
+        self.dockWidget.setFeatures(QtWidgets.QDockWidget.DockWidgetFloatable|QtWidgets.QDockWidget.DockWidgetMovable)
+        self.dockWidget.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea|QtCore.Qt.RightDockWidgetArea)
+        self.dockWidget.setObjectName("dockWidget")
+        self.dockWidgetContents = QtWidgets.QWidget()
+        self.dockWidgetContents.setObjectName("dockWidgetContents")
+        self.gridLayout = QtWidgets.QGridLayout(self.dockWidgetContents)
+        self.gridLayout.setObjectName("gridLayout")
+        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.pushButton = QtWidgets.QPushButton(self.dockWidgetContents)
+        self.pushButton.setObjectName("pushButton")
+        self.horizontalLayout.addWidget(self.pushButton)
+        self.checkBox = QtWidgets.QCheckBox(self.dockWidgetContents)
+        self.checkBox.setObjectName("checkBox")
+        self.horizontalLayout.addWidget(self.checkBox)
+        self.verticalLayout.addLayout(self.horizontalLayout)
+        self.treeWidget = QtWidgets.QTreeWidget(self.dockWidgetContents)
+        self.treeWidget.setObjectName("treeWidget")
+        self.verticalLayout.addWidget(self.treeWidget)
+        self.gridLayout.addLayout(self.verticalLayout, 0, 0, 1, 1)
+        self.dockWidget.setWidget(self.dockWidgetContents)
+        MainWindow.addDockWidget(QtCore.Qt.DockWidgetArea(1), self.dockWidget)
+
+        self.retranslateUi(MainWindow)
+        self.tabWidget.setCurrentIndex(0)
+        self.pushButton.clicked.connect(self.treeWidget.clear)
+        self.pushButton_3.clicked.connect(self.textBrowser_2.clear)
+        self.pushButton_3.clicked.connect(self.textBrowser.clear)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.pushButton_2.setText(_translate("MainWindow", "check"))
+        self.pushButton_3.setText(_translate("MainWindow", "clear"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "Check"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "Add"))
+        self.pushButton.setText(_translate("MainWindow", "Open ccu "))
+        self.checkBox.setText(_translate("MainWindow", "all control conf"))
+        self.treeWidget.headerItem().setText(0, _translate("MainWindow", "ccu_conf"))
+
