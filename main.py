@@ -72,6 +72,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
 
     # 校验配置文件函数
     def check_conf_file(self, file_path):
+        error_cnt = 0
         conf_dict = dict()
         n_temp = ''
         with open(file_path, 'r') as f:
@@ -91,17 +92,28 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                 conf_key_status = conf_dict.get(n, -1)
                 if conf_key_status == -1:
                     self.textBrowser_2.append("<font color=\"#FF0000\">" +
-                                              "此文件缺少Topic ：：" +
+                                              "ERROR:\t 此文件缺少Topic ：：" +
                                               n +
                                               '</font>')
+                    error_cnt+=1
                 else :
                     for u in goalDict[n]:
                         if u not in conf_dict[n]:
                             self.textBrowser_2.append("<font color=\"#FF0000\">" +
-                                                      "Topic  " + n +
+                                                      "ERROR:\tTopic  " + n +
                                                       "缺少参数：" +
-                                                      str(u) +
-                                                      '</font>')
+                                                      str(u) )
+                            error_cnt+=1
+
+            if error_cnt:
+                self.textBrowser_2.append("<font color=\"#FF0000\">" +
+                                          "ERROR:\t error_cnt " + str(error_cnt) +
+                                          '</font>')
+            else:
+                self.textBrowser_2.append("<font color=\"#FFFFFF\">" +
+                                          "校验通过！"
+                                          '</font>')
+
             f.close()
 
     # 弹出窗口选择文件夹目录
