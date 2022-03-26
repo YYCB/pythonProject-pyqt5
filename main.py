@@ -47,6 +47,11 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                                           ']::</font>' +
                                           file_dir)
                 # 读取选中的文件内容
+                self.textBrowser_2.append("<font color=\"#0000FF\">" +
+                                          '[' +
+                                          time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
+                                          ']::</font>' +
+                                          "开始校验")
                 self.check_conf_file(file_dir)
 
                 cnt = cnt + 1
@@ -59,12 +64,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                                           time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
                                           ']::</font>' +
                                       '请选择需要处理的control.toml文件')
-        else:
-            self.textBrowser_2.append("<font color=\"#0000FF\">" +
-                                          '[' +
-                                          time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
-                                          ']::</font>' +
-                                      "开始control配置文件校验")
+
 
         # 文本框显示到底部
         self.textBrowser.moveCursor(self.textBrowser.textCursor().End)
