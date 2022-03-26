@@ -86,14 +86,19 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                     v_temp = n.split('=', 1)[0]
                     if not v_temp.isspace():
                         conf_dict.setdefault(n_temp).append(v_temp)
-            # conf_status = cmp(goalDict, conf_dict)
-            # differ = set(goalDict.items()) ^ set(conf_dict.items())
-            # print(str(differ))
-            # if not conf_status == 0:
-            #     self.textBrowser.append(file_path)
+            # set(goalDict.keys()).difference(set(conf_dict.keys()))
+            # # print(goalDict.keys() - conf_dict.keys())
+            # self.textBrowser_2.append(file_path)
+            for n in goalDict.keys():
+                conf_key_status = conf_dict.get(n, -1)
+                if conf_key_status == -1:
+                    self.textBrowser_2.append("<font color=\"#FF0000\">" +
+                                              "此文件缺少Topic ：：" +
+                                              n +
+                                              '</font>')
+                else:
+                    print(set(conf_key_status) - set(conf_dict[n]))
 
-            self.textBrowser.append(file_path)
-            self.textBrowser.append(str(conf_dict))
             f.close()
 
     # 弹出窗口选择文件夹目录
@@ -120,6 +125,9 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                         # 将需要查找的变量及对应topic 存入到相应字典里
                         goalDict.setdefault(n_list[0], []).append(n_list[1])
                 f.close()
+                # 调试功能：输出本地control需要读取的配置文件名称
+                # for i in goalDict.keys():
+                #     self.textBrowser.append(str(goalDict[i]))
                 # self.textBrowser.append(str(goalDict))
                 self.textBrowser_2.append("<font color=\"#0000FF\">" +
                                           '[' +
