@@ -87,8 +87,8 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                     if not v_temp.isspace():
                         conf_dict.setdefault(n_temp).append(v_temp)
             # conf_status = cmp(goalDict, conf_dict)
-            differ = set(goalDict.items()) ^ set(conf_dict.items())
-            print(str(differ))
+            # differ = set(goalDict.items()) ^ set(conf_dict.items())
+            # print(str(differ))
             # if not conf_status == 0:
             #     self.textBrowser.append(file_path)
 
