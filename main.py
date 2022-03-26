@@ -85,10 +85,8 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                 elif n.find('=') != -1 and n.count('title')==0:
                     v_temp = n.split('=', 1)[0]
                     if not v_temp.isspace():
-                        conf_dict.setdefault(n_temp).append(v_temp)
-            # set(goalDict.keys()).difference(set(conf_dict.keys()))
-            # # print(goalDict.keys() - conf_dict.keys())
-            # self.textBrowser_2.append(file_path)
+                        conf_dict.setdefault(n_temp).append(v_temp.split())
+
             for n in goalDict.keys():
                 conf_key_status = conf_dict.get(n, -1)
                 if conf_key_status == -1:
@@ -96,9 +94,14 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                                               "此文件缺少Topic ：：" +
                                               n +
                                               '</font>')
-                else:
-                    print(set(conf_key_status) - set(conf_dict[n]))
-
+                else :
+                    for u in goalDict[n]:
+                        if u not in conf_dict[n]:
+                            self.textBrowser_2.append("<font color=\"#FF0000\">" +
+                                                      "Topic  " + n +
+                                                      "缺少参数：" +
+                                                      str(u) +
+                                                      '</font>')
             f.close()
 
     # 弹出窗口选择文件夹目录
@@ -123,7 +126,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                         n_list = n.split("\",")
                         n_list[1] = n_list[1].lstrip().lstrip("\"")
                         # 将需要查找的变量及对应topic 存入到相应字典里
-                        goalDict.setdefault(n_list[0], []).append(n_list[1])
+                        goalDict.setdefault(n_list[0], []).append(n_list[1].split())
                 f.close()
                 # 调试功能：输出本地control需要读取的配置文件名称
                 # for i in goalDict.keys():
