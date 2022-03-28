@@ -163,7 +163,6 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         n_temp = ''
         with open(file_path, 'r') as f:
             conf_f_list = f.readlines()
-
             # 将配置文件数据存入字典
             for n in conf_f_list:
                 # self.textBrowser.append(str(n))
@@ -176,26 +175,28 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                     if not v_temp.isspace():
                         conf_dict.setdefault(n_temp).append(v_temp.split())
             # 检查配置文件中缺少的量
-            for n in goalDict.keys():
-                conf_key_status = conf_dict.get(n, -1)
+            for topic in goalDict.keys():
+                conf_key_status = conf_dict.get(topic, -1)
                 if conf_key_status == -1:
                     self.textBrowser_2.append("<font color=\"#FF0000\">" +
                                               "ERROR:\t 此文件缺少Topic::" +
-                                              n +
+                                              topic +
                                               '</font>')
                     self.textBrowser_2.append("<font color=\"#FF0000\">" +
-                                              'ERROR:\t ' + n + '中包括：：' +
-                                              str(goalDict[n]) +
+                                              'ERROR:\t ' + topic + '中包括：：' +
+                                              str(goalDict[topic]) +
                                               '</font>')
                     error_cnt += 1
                 else:
-                    for u in goalDict[n]:
-                        if u not in conf_dict[n]:
+                    for u in goalDict[topic]:
+                        if u not in conf_dict[topic]:
                             self.textBrowser_2.append("<font color=\"#FF0000\">" +
-                                                      "ERROR:\tTopic  " + n +
+                                                      "ERROR:\tTopic  " + topic +
                                                       "缺少参数：" +
                                                       str(u))
                             error_cnt += 1
+            #TODO::添加检查配置文件同一个topic下重复的变量
+            # for n in conf_dict.keys():
 
             if error_cnt:
                 self.textBrowser_2.append("<font color=\"#FF0000\">" +
