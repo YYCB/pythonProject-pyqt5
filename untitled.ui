@@ -27,18 +27,12 @@
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="0" column="0">
          <layout class="QGridLayout" name="gridLayout_5">
-          <item row="0" column="2">
-           <widget class="QTextBrowser" name="textBrowser_2"/>
-          </item>
-          <item row="3" column="2">
+          <item row="2" column="2">
            <widget class="QPushButton" name="pushButton_3">
             <property name="text">
              <string>Clear</string>
             </property>
            </widget>
-          </item>
-          <item row="2" column="3">
-           <layout class="QGridLayout" name="gridLayout_4"/>
           </item>
           <item row="1" column="2">
            <widget class="QPushButton" name="pushButton_2">
@@ -47,19 +41,29 @@
             </property>
            </widget>
           </item>
+          <item row="1" column="3">
+           <widget class="QPushButton" name="pushButton_4">
+            <property name="text">
+             <string>Add</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="QPushButton" name="pushButton_8">
+            <property name="text">
+             <string>Clear</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QTextBrowser" name="textBrowser_2"/>
+          </item>
           <item row="0" column="3">
-           <layout class="QVBoxLayout" name="verticalLayout_2">
-            <item>
-             <layout class="QVBoxLayout" name="verticalLayout_3">
-              <item>
-               <layout class="QVBoxLayout" name="verticalLayout_4"/>
-              </item>
-             </layout>
-            </item>
-            <item>
+           <layout class="QGridLayout" name="gridLayout_7">
+            <item row="0" column="0">
              <widget class="QTextBrowser" name="textBrowser"/>
             </item>
-            <item>
+            <item row="1" column="0">
              <widget class="QScrollArea" name="scrollArea">
               <property name="widgetResizable">
                <bool>false</bool>
@@ -74,7 +78,7 @@
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_6">
-                <item row="4" column="0">
+                <item row="14" column="0">
                  <layout class="QHBoxLayout" name="horizontalLayout_3">
                   <item>
                    <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -86,37 +90,11 @@
                      </widget>
                     </item>
                     <item>
-                     <spacer name="horizontalSpacer_6">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>40</width>
-                        <height>20</height>
-                       </size>
-                      </property>
-                     </spacer>
-                    </item>
-                    <item>
                      <widget class="QPushButton" name="pushButton_6">
                       <property name="text">
                        <string>variable</string>
                       </property>
                      </widget>
-                    </item>
-                    <item>
-                     <spacer name="horizontalSpacer_8">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>40</width>
-                        <height>20</height>
-                       </size>
-                      </property>
-                     </spacer>
                     </item>
                     <item>
                      <widget class="QPushButton" name="pushButton_7">
@@ -146,33 +124,7 @@
                      <widget class="QTextEdit" name="textEdit_3"/>
                     </item>
                     <item>
-                     <spacer name="horizontalSpacer_7">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>40</width>
-                        <height>20</height>
-                       </size>
-                      </property>
-                     </spacer>
-                    </item>
-                    <item>
                      <widget class="QTextEdit" name="textEdit"/>
-                    </item>
-                    <item>
-                     <spacer name="horizontalSpacer_12">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>40</width>
-                        <height>20</height>
-                       </size>
-                      </property>
-                     </spacer>
                     </item>
                     <item>
                      <widget class="QTextEdit" name="textEdit_2"/>
@@ -181,7 +133,7 @@
                   </item>
                  </layout>
                 </item>
-                <item row="5" column="0">
+                <item row="20" column="0">
                  <spacer name="horizontalSpacer_5">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
@@ -194,7 +146,7 @@
                   </property>
                  </spacer>
                 </item>
-                <item row="6" column="0">
+                <item row="21" column="0">
                  <spacer name="horizontalSpacer_4">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
@@ -207,20 +159,7 @@
                   </property>
                  </spacer>
                 </item>
-                <item row="1" column="0">
-                 <spacer name="horizontalSpacer_10">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item row="8" column="0">
+                <item row="23" column="0">
                  <spacer name="horizontalSpacer">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
@@ -233,7 +172,7 @@
                   </property>
                  </spacer>
                 </item>
-                <item row="7" column="0">
+                <item row="22" column="0">
                  <spacer name="horizontalSpacer_3">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
@@ -246,7 +185,20 @@
                   </property>
                  </spacer>
                 </item>
-                <item row="3" column="0">
+                <item row="17" column="0">
+                 <spacer name="horizontalSpacer_11">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="18" column="0">
                  <spacer name="horizontalSpacer_9">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
@@ -259,8 +211,36 @@
                   </property>
                  </spacer>
                 </item>
-                <item row="0" column="0">
-                 <spacer name="horizontalSpacer_2">
+                <item row="8" column="0">
+                 <layout class="QHBoxLayout" name="horizontalLayout_4">
+                  <item>
+                   <widget class="QRadioButton" name="radioButton_4">
+                    <property name="text">
+                     <string>All</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item alignment="Qt::AlignLeft">
+                   <widget class="QRadioButton" name="radioButton_3">
+                    <property name="text">
+                     <string>Single</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QFontComboBox" name="fontComboBox">
+                    <property name="currentText">
+                     <string>Control.toml</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item row="19" column="0">
+                 <spacer name="horizontalSpacer_6">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
                   </property>
@@ -272,8 +252,21 @@
                   </property>
                  </spacer>
                 </item>
-                <item row="2" column="0">
-                 <spacer name="horizontalSpacer_11">
+                <item row="16" column="0">
+                 <spacer name="horizontalSpacer_10">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="15" column="0">
+                 <spacer name="horizontalSpacer_2">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
                   </property>
@@ -290,20 +283,6 @@
              </widget>
             </item>
            </layout>
-          </item>
-          <item row="1" column="3">
-           <widget class="QPushButton" name="pushButton_4">
-            <property name="text">
-             <string>Add</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="3">
-           <widget class="QPushButton" name="pushButton_8">
-            <property name="text">
-             <string>Clear</string>
-            </property>
-           </widget>
           </item>
          </layout>
         </item>
@@ -406,12 +385,12 @@
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>970</x>
-     <y>587</y>
+     <x>911</x>
+     <y>523</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1081</x>
-     <y>590</y>
+     <x>1314</x>
+     <y>525</y>
     </hint>
    </hints>
   </connection>
@@ -422,12 +401,12 @@
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>992</x>
-     <y>650</y>
+     <x>911</x>
+     <y>557</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1082</x>
-     <y>655</y>
+     <x>1314</x>
+     <y>561</y>
     </hint>
    </hints>
   </connection>
@@ -438,12 +417,12 @@
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>955</x>
-     <y>713</y>
+     <x>911</x>
+     <y>591</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1099</x>
-     <y>723</y>
+     <x>1314</x>
+     <y>597</y>
     </hint>
    </hints>
   </connection>
@@ -474,8 +453,8 @@
      <y>894</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1110</x>
-     <y>595</y>
+     <x>1314</x>
+     <y>525</y>
     </hint>
    </hints>
   </connection>
@@ -490,8 +469,8 @@
      <y>898</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1099</x>
-     <y>649</y>
+     <x>1314</x>
+     <y>561</y>
     </hint>
    </hints>
   </connection>
@@ -506,8 +485,40 @@
      <y>902</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1171</x>
-     <y>712</y>
+     <x>1314</x>
+     <y>597</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_4</sender>
+   <signal>clicked()</signal>
+   <receiver>fontComboBox</receiver>
+   <slot>hide()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>870</x>
+     <y>471</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1195</x>
+     <y>479</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>fontComboBox</receiver>
+   <slot>show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1020</x>
+     <y>477</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1144</x>
+     <y>480</y>
     </hint>
    </hints>
   </connection>
