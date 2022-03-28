@@ -212,8 +212,8 @@
                  </spacer>
                 </item>
                 <item row="8" column="0">
-                 <layout class="QHBoxLayout" name="horizontalLayout_4">
-                  <item>
+                 <layout class="QFormLayout" name="formLayout">
+                  <item row="0" column="0">
                    <widget class="QRadioButton" name="radioButton_4">
                     <property name="text">
                      <string>All</string>
@@ -223,17 +223,10 @@
                     </property>
                    </widget>
                   </item>
-                  <item alignment="Qt::AlignLeft">
+                  <item row="0" column="1">
                    <widget class="QRadioButton" name="radioButton_3">
                     <property name="text">
                      <string>Single</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QFontComboBox" name="fontComboBox">
-                    <property name="currentText">
-                     <string>Control.toml</string>
                     </property>
                    </widget>
                   </item>
@@ -277,6 +270,13 @@
                    </size>
                   </property>
                  </spacer>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QFontComboBox" name="fontComboBox">
+                  <property name="currentText">
+                   <string>Control.toml</string>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </widget>

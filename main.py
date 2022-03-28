@@ -25,13 +25,34 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_2.clicked.connect(self.checkOnClicked)
         # add按钮 触发添加功能
         self.pushButton_add.clicked.connect(self.addIntoConf)
+        self.radioButton_3.clicked.connect(self.radioButton_single)
+        self.fontComboBox.clear()
+        self.fontComboBox.addItem('control.toml')
+        self.fontComboBox.hide()
+
+    def radioButton_single(self):
+        item = QtWidgets.QTreeWidgetItemIterator(self.treeWidget)
+        while item.value():
+            file_dir = ccu_conf_dir
+            if item.value().checkState(0) == Qt.Checked:
+                check_file_parent = item.value().parent()
+                # 读取选中的配置文件路径
+                file_dir_back = ';/' + item.value().text(0)
+                while check_file_parent != self.treeWidget.topLevelItem(0):
+                    file_dir_back += ';/' + check_file_parent.text(0)
+                    check_file_parent = check_file_parent.parent()
+                file_dir_list = list(reversed(file_dir_back.split(';')))
+                for f in file_dir_list:
+                    file_dir += f
+                self.fontComboBox.addItem(file_dir)
+            item.__iadd__(1)
 
     def addIntoConf(self):
-        topic = self.textEdit_3_Topic.toPlainText().upper().strip()
+        topic = '[' + self.textEdit_3_Topic.toPlainText().upper().strip() + ']'
         variable = self.textEdit_Variable.toPlainText().lower().strip()
         temp = self.textEdit_2.toPlainText().strip()
         print()
-        if len(topic) or len(variable) or len(temp):
+        if len(topic) and len(variable) and len(temp):
             self.textBrowser.append("<font color=\"#FF0000\">" +
                                   '[' +
                                   time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
@@ -41,11 +62,45 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                                   'temp:'  + str(temp)
                                   )
 
+            item = QtWidgets.QTreeWidgetItemIterator(self.treeWidget)
+            cnt = 0
+            # 遍历全部结点，找出选中的文件
+            while item.value():
+                file_dir = ccu_conf_dir
+                if item.value().checkState(0) == Qt.Checked:
+                    check_file_parent = item.value().parent()
+                    # 读取选中的配置文件路径
+                    file_dir_back = ';/' + item.value().text(0)
+                    while check_file_parent != self.treeWidget.topLevelItem(0):
+                        file_dir_back += ';/' + check_file_parent.text(0)
+                        check_file_parent = check_file_parent.parent()
+                    file_dir_list = list(reversed(file_dir_back.split(';')))
+                    for f in file_dir_list:
+                        file_dir += f
+                    self.textBrowser.append("<font color=\"#0000FF\">" +
+                                              '[' +
+                                              time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
+                                              ']::</font>' +
+                                              file_dir)
+                    self.add_conf_file(file_dir)
+                    cnt = cnt + 1
+
+                item.__iadd__(1)
+
         else:
             self.textBrowser.append("<font color=\"#FF0000\">" +
                                     'ERROR::请将待添加的 参数列表填写完整</font>'
                                     )
         self.textBrowser.moveCursor(self.textBrowser.textCursor().End)
+
+    # TODO:文件写入
+    def add_conf_file(self, file_path):
+        with open(file_path, 'r+') as f:
+            self.textBrowser.append("<font color=\"#0000FF\">" +
+                                    '[' +
+                                    time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
+                                    ']::</font>' +
+                                    "开始添加参数")
 
     # check按钮触发对比检查
     def checkOnClicked(self):
