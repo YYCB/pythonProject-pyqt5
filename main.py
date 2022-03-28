@@ -32,6 +32,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
 
     def radioButton_single(self):
         item = QtWidgets.QTreeWidgetItemIterator(self.treeWidget)
+        cnt = 0
         while item.value():
             file_dir = ccu_conf_dir
             if item.value().checkState(0) == Qt.Checked:
@@ -46,47 +47,55 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                     file_dir += f
                 self.fontComboBox.addItem(file_dir)
             item.__iadd__(1)
+            cnt = cnt + 1
+
+        # 提示未选取目标文件
+        if cnt == 0:
+            self.textBrowser.append("<font color=\"#FF0000\">" +
+                                    'ERROE::请在左侧目录树中选择所需的control.toml文件' + '</font>')
 
     def addIntoConf(self):
         topic = '[' + self.textEdit_3_Topic.toPlainText().upper().strip() + ']'
         variable = self.textEdit_Variable.toPlainText().lower().strip()
         temp = self.textEdit_2.toPlainText().strip()
-        print()
+
         if len(topic) and len(variable) and len(temp):
-            self.textBrowser.append("<font color=\"#FF0000\">" +
-                                  '[' +
-                                  time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
-                                  ']::</font>' +
-                                  'topic:' + str(topic) + '\t'
-                                  'variable:' + str(variable) + '\t'
-                                  'temp:'  + str(temp)
-                                  )
+            if self.radioButton_3.isChecked():
+                self.textBrowser.append(self.fontComboBox.currentText())
+            else:
+                self.textBrowser.append("<font color=\"#FF0000\">" +
+                                        '[' +
+                                        time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
+                                        ']::</font>' +
+                                        'topic:' + str(topic) + '\t'
+                                                                'variable:' + str(variable) + '\t'
+                                                                                              'temp:' + str(temp)
+                                        )
 
-            item = QtWidgets.QTreeWidgetItemIterator(self.treeWidget)
-            cnt = 0
-            # 遍历全部结点，找出选中的文件
-            while item.value():
-                file_dir = ccu_conf_dir
-                if item.value().checkState(0) == Qt.Checked:
-                    check_file_parent = item.value().parent()
-                    # 读取选中的配置文件路径
-                    file_dir_back = ';/' + item.value().text(0)
-                    while check_file_parent != self.treeWidget.topLevelItem(0):
-                        file_dir_back += ';/' + check_file_parent.text(0)
-                        check_file_parent = check_file_parent.parent()
-                    file_dir_list = list(reversed(file_dir_back.split(';')))
-                    for f in file_dir_list:
-                        file_dir += f
-                    self.textBrowser.append("<font color=\"#0000FF\">" +
-                                              '[' +
-                                              time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
-                                              ']::</font>' +
-                                              file_dir)
-                    self.add_conf_file(file_dir)
-                    cnt = cnt + 1
+                item = QtWidgets.QTreeWidgetItemIterator(self.treeWidget)
+                cnt = 0
+                # 遍历全部结点，找出选中的文件
+                while item.value():
+                    file_dir = ccu_conf_dir
+                    if item.value().checkState(0) == Qt.Checked:
+                        check_file_parent = item.value().parent()
+                        # 读取选中的配置文件路径
+                        file_dir_back = ';/' + item.value().text(0)
+                        while check_file_parent != self.treeWidget.topLevelItem(0):
+                            file_dir_back += ';/' + check_file_parent.text(0)
+                            check_file_parent = check_file_parent.parent()
+                        file_dir_list = list(reversed(file_dir_back.split(';')))
+                        for f in file_dir_list:
+                            file_dir += f
+                        self.textBrowser.append("<font color=\"#0000FF\">" +
+                                                '[' +
+                                                time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
+                                                ']::</font>' +
+                                                file_dir)
+                        self.add_conf_file(file_dir)
+                        cnt = cnt + 1
 
-                item.__iadd__(1)
-
+                    item.__iadd__(1)
         else:
             self.textBrowser.append("<font color=\"#FF0000\">" +
                                     'ERROR::请将待添加的 参数列表填写完整</font>'
@@ -96,11 +105,13 @@ class MyWindow(QMainWindow, Ui_MainWindow):
     # TODO:文件写入
     def add_conf_file(self, file_path):
         with open(file_path, 'r+') as f:
-            self.textBrowser.append("<font color=\"#0000FF\">" +
-                                    '[' +
-                                    time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
-                                    ']::</font>' +
-                                    "开始添加参数")
+            print('123')
+            # self.textBrowser.append("<font color=\"#0000FF\">" +
+            #                         '[' +
+            #                         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
+            #                         ']::</font>' +
+            #                         "开始添加参数")
+        f.close()
 
     # check按钮触发对比检查
     def checkOnClicked(self):
@@ -137,14 +148,12 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         # 提示未选取目标文件
         if cnt == 0:
             self.textBrowser_2.append("<font color=\"#FF0000\">" +
-                                          '[' +
-                                          time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
-                                          ']::</font>' +
+                                      '[' +
+                                      time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
+                                      ']::</font>' +
                                       '请选择需要处理的control.toml文件')
 
-
         # 文本框显示到底部
-
         self.textBrowser_2.moveCursor(self.textBrowser.textCursor().End)
 
     # 校验配置文件函数
@@ -160,7 +169,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                 if n.startswith('[') and n.isupper():
                     n_temp = n.strip('[').strip(']')
                     conf_dict.setdefault(n_temp, [])
-                elif n.find('=') != -1 and n.count('title')==0:
+                elif n.find('=') != -1 and n.count('title') == 0:
                     v_temp = n.split('=', 1)[0]
                     if not v_temp.isspace():
                         conf_dict.setdefault(n_temp).append(v_temp.split())
@@ -169,27 +178,34 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                 conf_key_status = conf_dict.get(n, -1)
                 if conf_key_status == -1:
                     self.textBrowser_2.append("<font color=\"#FF0000\">" +
-                                              "ERROR:\t 此文件缺少Topic ：：" +
+                                              "ERROR:\t 此文件缺少Topic::" +
                                               n +
                                               '</font>')
-                    error_cnt+=1
-                else :
+                    self.textBrowser_2.append("<font color=\"#FF0000\">" +
+                                              'ERROR:\t ' + n + '中包括：：' +
+                                              str(goalDict[n]) +
+                                              '</font>')
+
+                    error_cnt += 1
+                else:
                     for u in goalDict[n]:
                         if u not in conf_dict[n]:
                             self.textBrowser_2.append("<font color=\"#FF0000\">" +
                                                       "ERROR:\tTopic  " + n +
                                                       "缺少参数：" +
-                                                      str(u) )
-                            error_cnt+=1
+                                                      str(u))
+                            error_cnt += 1
 
             if error_cnt:
                 self.textBrowser_2.append("<font color=\"#FF0000\">" +
                                           "ERROR:\t error_cnt " + str(error_cnt) +
                                           '</font>')
             else:
-                self.textBrowser_2.append("<font color=\"#FFFFFF\">" +
-                                          "校验通过！"
-                                          '</font>')
+                self.textBrowser_2.append("<font color=\"#0000FF\">" +
+                                    '[' +
+                                    time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
+                                    ']::</font>' +
+                                    '校验通过！')
 
             f.close()
 
@@ -228,9 +244,9 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                                           'controller_agent.cpp中总计参数为' + str(len(goalList)))
         else:
             self.textBrowser_2.append("<font color=\"#FF0000\">" +
-                                          '[' +
-                                          time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
-                                          ']::</font>' +
+                                      '[' +
+                                      time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
+                                      ']::</font>' +
                                       'ERROR：未寻找到controller_agent.cpp文件')
 
     # 创建顶级目录
@@ -244,8 +260,8 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         tree_item = QTreeWidgetItem()
         tree_item.setText(0, os.path.basename(path))
         for file in os.listdir(path):
-            if os.path.isdir(os.path.join(path, file)) and\
-                    file != '.git' and\
+            if os.path.isdir(os.path.join(path, file)) and \
+                    file != '.git' and \
                     file != 'ccu_autostart_script':
                 tree_item.addChild(self.populate(os.path.join(path, file)))
             else:
