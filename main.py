@@ -23,6 +23,29 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         self.pushButton.clicked.connect(self.msg)
         # check按钮 触发对比检查
         self.pushButton_2.clicked.connect(self.checkOnClicked)
+        # add按钮 触发添加功能
+        self.pushButton_add.clicked.connect(self.addIntoConf)
+
+    def addIntoConf(self):
+        topic = self.textEdit_3_Topic.toPlainText().upper().strip()
+        variable = self.textEdit_Variable.toPlainText().lower().strip()
+        temp = self.textEdit_2.toPlainText().strip()
+        print()
+        if len(topic) or len(variable) or len(temp):
+            self.textBrowser.append("<font color=\"#FF0000\">" +
+                                  '[' +
+                                  time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
+                                  ']::</font>' +
+                                  'topic:' + str(topic) + '\t'
+                                  'variable:' + str(variable) + '\t'
+                                  'temp:'  + str(temp)
+                                  )
+
+        else:
+            self.textBrowser.append("<font color=\"#FF0000\">" +
+                                    'ERROR::请将待添加的 参数列表填写完整</font>'
+                                    )
+        self.textBrowser.moveCursor(self.textBrowser.textCursor().End)
 
     # check按钮触发对比检查
     def checkOnClicked(self):
@@ -53,7 +76,6 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                                           ']::</font>' +
                                           "开始校验")
                 self.check_conf_file(file_dir)
-
                 cnt = cnt + 1
 
             item.__iadd__(1)
@@ -67,7 +89,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
 
 
         # 文本框显示到底部
-        self.textBrowser.moveCursor(self.textBrowser.textCursor().End)
+
         self.textBrowser_2.moveCursor(self.textBrowser.textCursor().End)
 
     # 校验配置文件函数
