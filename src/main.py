@@ -105,7 +105,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
     # TODO:文件写入
     def add_conf_file(self, file_path):
         with open(file_path, 'r+') as f:
-            print('123')
+            print('')
             # self.textBrowser.append("<font color=\"#0000FF\">" +
             #                         '[' +
             #                         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
@@ -163,6 +163,8 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         n_temp = ''
         with open(file_path, 'r') as f:
             conf_f_list = f.readlines()
+
+            # 将配置文件数据存入字典
             for n in conf_f_list:
                 # self.textBrowser.append(str(n))
                 n = n.strip()
@@ -173,7 +175,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                     v_temp = n.split('=', 1)[0]
                     if not v_temp.isspace():
                         conf_dict.setdefault(n_temp).append(v_temp.split())
-
+            # 检查配置文件中缺少的量
             for n in goalDict.keys():
                 conf_key_status = conf_dict.get(n, -1)
                 if conf_key_status == -1:
@@ -185,7 +187,6 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                                               'ERROR:\t ' + n + '中包括：：' +
                                               str(goalDict[n]) +
                                               '</font>')
-
                     error_cnt += 1
                 else:
                     for u in goalDict[n]:
@@ -202,10 +203,10 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                                           '</font>')
             else:
                 self.textBrowser_2.append("<font color=\"#0000FF\">" +
-                                    '[' +
-                                    time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
-                                    ']::</font>' +
-                                    '校验通过！')
+                                          '[' +
+                                          time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
+                                          ']::</font>' +
+                                          '校验通过！')
 
             f.close()
 
