@@ -39,7 +39,7 @@ def conf_dict_update(file_path):
 
 # TODO:检查重复变量
 def check_duplicate_variable():
-         print("TODO：检查重复变量")
+    print("TODO：检查重复变量")
 
 
 class MyWindow(QMainWindow, Ui_MainWindow):
@@ -81,8 +81,8 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                                     'ERROR::左侧树形图中未选择工作文件</font>'
                                     )
             self.textBrowser_2.append("<font color=\"#FF0000\">" +
-                                    'ERROR::左侧树形图中未选择工作文件</font>'
-                                    )
+                                      'ERROR::左侧树形图中未选择工作文件</font>'
+                                      )
 
     # 单独文件添加内容，显示所有被选中的文件并选择
     def radioButton_single(self):
@@ -97,13 +97,14 @@ class MyWindow(QMainWindow, Ui_MainWindow):
 
     # 向配置文件中添加内容
     def addIntoConf(self):
-        topic = '[' + self.textEdit_3_Topic.toPlainText().upper().strip() + ']'
-        variable = self.textEdit_Variable.toPlainText().lower().strip()
-        temp = self.textEdit_2.toPlainText().strip()
+        addDict = {'topic': '', 'variable': '', 'temp': ''}
+        addDict['topic'] = '[' + self.textEdit_3_Topic.toPlainText().upper().strip() + ']'
+        addDict['variable'] = self.textEdit_Variable.toPlainText().lower().strip()
+        addDict['temp'] = self.textEdit_2.toPlainText().strip()
         # 更新工作区文件目录
         self.file_checked_list_update()
         # 检查所需输入是否安全
-        if not len(topic) or not len(variable) or not len(temp):
+        if not len(addDict['topic']) or not  addDict['variable'] or not addDict['temp']:
             self.textBrowser.append("<font color=\"#FF0000\">" +
                                     'ERROR::请将待添加的 参数列表填写完整</font>'
                                     )
@@ -119,16 +120,16 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                                 '[' +
                                 time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
                                 ']::</font>' +
-                                'topic:' + str(topic) + '\t'
-                                                        'variable:' + str(variable) + '\t'
-                                                                                      'temp:' + str(temp)
+                                'topic:' + str(addDict['topic']) + '\t'
+                                'variable:' + str(addDict['variable']) + '\t'
+                                'temp:' + str(addDict['temp'])
                                 )
         # 单个文件新加参数
         if self.radioButton_3.isChecked():
             self.textBrowser.append("<font color=\"#FF0000\">" +
                                     '[' +
                                     time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
-                                    ']::</font>'+'写入到文件:' + self.fontComboBox.currentText())
+                                    ']::</font>' + '写入到文件:' + self.fontComboBox.currentText())
             self.add_conf_file(self.fontComboBox.currentText())
         else:
             #  全部工作区内文件写入数据
@@ -136,7 +137,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                 self.textBrowser.append("<font color=\"#FF0000\">" +
                                         '[' +
                                         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
-                                        ']::</font>'+
+                                        ']::</font>' +
                                         '写入到文件:' + file_dir)
                 self.add_conf_file(file_dir)
 
@@ -144,6 +145,8 @@ class MyWindow(QMainWindow, Ui_MainWindow):
 
     # TODO:文件写入
     def add_conf_file(self, file_path):
+        # 读取文件参数
+        conf_dict_temp = conf_dict_update(file_path)
         with open(file_path, 'r+') as f:
             self.textBrowser.append("FFFFFF")
         f.close()
@@ -154,6 +157,11 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         self.file_checked_list_update()
         # 校验配置文件
         for filepath in fileCheckedList:
+            self.textBrowser_2.append("<font color=\"#0000FF\">" +
+                                        '[' +
+                                        time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
+                                        ']::</font>' +
+                                        '校验文件:' + filepath)
             self.check_conf_file(filepath)
         # 文本框显示到底部
         self.textBrowser_2.moveCursor(self.textBrowser.textCursor().End)
