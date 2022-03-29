@@ -13,7 +13,7 @@ control_agent = folder + '/control/controller_agent.cpp'
 goalString = "toml::find(ctrl_config,"
 goalList = []
 goalDict = dict()
-
+conf_dict = dict()
 
 class MyWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -53,7 +53,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         if cnt == 0:
             self.textBrowser.append("<font color=\"#FF0000\">" +
                                     'ERROE::请在左侧目录树中选择所需的control.toml文件' + '</font>')
-
+    # 向配置文件中添加内容
     def addIntoConf(self):
         topic = '[' + self.textEdit_3_Topic.toPlainText().upper().strip() + ']'
         variable = self.textEdit_Variable.toPlainText().lower().strip()
@@ -159,13 +159,13 @@ class MyWindow(QMainWindow, Ui_MainWindow):
     # 校验配置文件函数
     def check_conf_file(self, file_path):
         error_cnt = 0
-        conf_dict = dict()
+
         n_temp = ''
+
         with open(file_path, 'r') as f:
             conf_f_list = f.readlines()
-            # 将配置文件数据存入字典
+            # 将配置文件中数据存入字典
             for n in conf_f_list:
-                # self.textBrowser.append(str(n))
                 n = n.strip()
                 if n.startswith('[') and n.isupper():
                     n_temp = n.strip('[').strip(']')
@@ -174,7 +174,8 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                     v_temp = n.split('=', 1)[0]
                     if not v_temp.isspace():
                         conf_dict.setdefault(n_temp).append(v_temp.split())
-            # 检查配置文件中缺少的量
+
+            # 检查配置文件中缺少的变量
             for topic in goalDict.keys():
                 conf_key_status = conf_dict.get(topic, -1)
                 if conf_key_status == -1:
@@ -195,8 +196,8 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                                                       "缺少参数：" +
                                                       str(u))
                             error_cnt += 1
-            #TODO::添加检查配置文件同一个topic下重复的变量
-            # for n in conf_dict.keys():
+            # TODO::添加检查配置文件同一个topic下重复的变量
+            self.check_duplicate_variable()
 
             if error_cnt:
                 self.textBrowser_2.append("<font color=\"#FF0000\">" +
@@ -211,15 +212,24 @@ class MyWindow(QMainWindow, Ui_MainWindow):
 
             f.close()
 
+    # 检查重复变量
+    def check_duplicate_variable(self):
+        for topic in conf_dict:
+            # u = set(conf_dict[topic])
+            # self.textBrowser_2.append(str(set(conf_dict[topic])))
+            # u = list(conf_dict[topic])
+             print("123")
     # 弹出窗口选择文件夹目录
     def msg(self):
         # 默认打开/home/root/ccu/ccu_config目录
         # 避免关闭后异常退出
         goalDict.clear()
         goalList.clear()
+        # 弹出窗口选择文件夹目录
         if os.path.isdir(ccu_conf_dir):
             self.pushButton.setText(ccu_conf_dir)
             self.make_tree(ccu_conf_dir)
+
         # 读取目录中的control_agent.cpp文件
         # TODO:develop分支中已优化为宏定义形式需要适配
         if os.path.isfile(control_agent):
@@ -255,9 +265,10 @@ class MyWindow(QMainWindow, Ui_MainWindow):
     def make_tree(self, f):
         root = self.populate(f)
         self.treeWidget.insertTopLevelItem(0, root)
+        self.treeWidget.topLevelItem(0).setExpanded(1)
 
     # 循环读取该目录下所有文件
-    # 并找到control_agent.cpp文件 提取所有需要的配置参数
+    # 找到control_agent.cpp文件 提取所有需要的配置参数
     def populate(self, path):
         tree_item = QTreeWidgetItem()
         tree_item.setText(0, os.path.basename(path))
