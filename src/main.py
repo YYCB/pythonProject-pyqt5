@@ -36,8 +36,14 @@ def conf_dict_update(file_path):
     f.close()
     return conf_dict_temp
 # TODO:找出重复的变量并输出
-def check_duplicate_variable(goalDict,  conf_dict_temp):
-    print('TODO:找出重复的变量并输出')
+# def check_duplicate_variable(conf_dict_temp):
+#     list_temp = list()
+#     for topic in conf_dict_temp:
+#         for u in conf_dict_temp[topic]:
+#             list_temp+=u
+#     list_temp.sort()
+#     for counts in list_temp.counts:
+#         list_temp.count()
 
 def read_from_agent(control_agent_temp):
     with open(control_agent_temp, 'r') as f:
