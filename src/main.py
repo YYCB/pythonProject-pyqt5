@@ -98,9 +98,9 @@ class MyWindow(QMainWindow, Ui_MainWindow):
     # 向配置文件中添加内容
     def addIntoConf(self):
         # 将Topic转换成大写形式
-        add_dict = {'topic': '[' + self.textEdit_3_Topic.toPlainText().upper().strip() + ']',
-                   'variable': self.textEdit_Variable.toPlainText().lower().strip(),
-                   'temp': self.textEdit_2.toPlainText().strip()}
+        add_dict = {'topic': self.textEdit_3_Topic.toPlainText().upper().strip(),
+                    'variable': self.textEdit_Variable.toPlainText().lower().strip(),
+                    'temp': self.textEdit_2.toPlainText().strip()}
 
         # 检查所需输入是否安全
         if not len(add_dict['topic']) or not add_dict['variable'] or not add_dict['temp']:
@@ -115,41 +115,47 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                                     )
             return
         # 显示添加的内容
+        self.textBrowser.append("<font color=\"#FF0000\">" +
+                                '[' +
+                                time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
+                                ']::</font>' + '添加内容:' + '[' +
+                                str(add_dict['topic']) + ']' + '\t' +
+                                str(add_dict['variable']) + '=' +
+                                str(add_dict['temp'])
+                                )
 
-        # 单个文件新加参数
+        # 判断工作区全部文件添加参数还是单个文件添加
         if self.radioButton_3.isChecked():
+            work_list = [self.fontComboBox.currentText()]
+        else:
+            self.file_checked_list_update()
+            work_list = fileCheckedList
+
+        #  全部工作区内文件写入数据
+        for file_dir in work_list:
             self.textBrowser.append("<font color=\"#FF0000\">" +
                                     '[' +
                                     time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
-                                    ']::</font>' + '写入到文件:' + self.fontComboBox.currentText())
-            self.add_conf_file(self.fontComboBox.currentText(),add_dict)
-        else:
-            # 更新工作区文件目录
-            self.file_checked_list_update()
-            #  全部工作区内文件写入数据
-            for file_dir in fileCheckedList:
-                self.textBrowser.append("<font color=\"#FF0000\">" +
-                                        '[' +
-                                        time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
-                                        ']::</font>' +
-                                        '写入到文件:' + file_dir)
-                self.add_conf_file(file_dir,add_dict)
+                                    ']::</font>' +
+                                    '写入到文件:' + file_dir)
+            self.add_conf_file(file_dir, add_dict)
 
         self.textBrowser.moveCursor(self.textBrowser.textCursor().End)
 
     # TODO:文件写入
-    def add_conf_file(self, file_path , add_dict):
+    def add_conf_file(self, file_path, add_dict):
         # 读取文件参数
         conf_dict_temp = conf_dict_update(file_path)
+        if add_dict['topic'] in conf_dict_temp and add_dict['variable'] in conf_dict_temp[add_dict['topic']]:
+            self.textBrowser.append('<font color=\"#FF0000\">ERROR:: 该参数已存在</font>')
+
+
+        # if add_dict[0] in conf_dict_temp and add_dict[1] in conf_dict_temp[add_dict[0]]:
+        #     self.textBrowser.append('<font color=\"#FF0000\">ERROR:: 该参数已存在</font>')
+        #     return
+
         with open(file_path, 'r+') as f:
-            self.textBrowser.append("<font color=\"#FF0000\">" +
-                                    '[' +
-                                    time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
-                                    ']::</font>' + '添加内容:'
-                                                   '[' + str(add_dict['topic']) + ']\t' +
-                                    str(add_dict['variable']) + '=' +
-                                    str(add_dict['temp'])
-                                    )
+
             f.close()
 
     # check按钮触发对比检查
