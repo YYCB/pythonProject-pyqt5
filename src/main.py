@@ -37,12 +37,22 @@ def conf_dict_update(file_path):
     return conf_dict_temp
 # TODO:找出重复的变量并输出
 def check_duplicate_variable(goalDict,  conf_dict_temp):
-    print('123')
+    print('TODO:找出重复的变量并输出')
 
-# TODO:检查重复变量
-def check_duplicate_variable():
-    print("TODO：检查重复变量")
-
+def read_from_agent(control_agent_temp):
+    with open(control_agent_temp, 'r') as f:
+        f_list = f.readlines()
+        for n in f_list:
+            # TODO:develop分支中已优化为宏定义形式需要适配
+            if n.count(goalString) and not n.count("//"):
+                n = n.strip().rstrip("\");")
+                n = n.lstrip(goalString).lstrip().lstrip("\"")
+                goalList.append(n)
+                n_list = n.split("\",")
+                n_list[1] = n_list[1].lstrip().lstrip("\"")
+                # 将需要查找的变量及对应topic 存入到相应字典里
+                goalDict.setdefault(n_list[0], []).append(n_list[1].split())
+    f.close()
 
 class MyWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -144,7 +154,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
 
         self.textBrowser.moveCursor(self.textBrowser.textCursor().End)
 
-    # TODO:文件写入
+    # conf文件新增变量
     def add_conf_file(self, file_path, add_dict):
         # 读取文件参数
         conf_dict_temp = dict()
@@ -163,6 +173,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                              add_dict['variable'] + ' = ' +
                              add_dict['temp'] + '\n')
             f.close()
+    # TODO：conf文件add and change变量
 
     # check按钮触发对比检查
     def checkOnClicked(self):
@@ -216,7 +227,6 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         # TODO::添加检查配置文件同一个topic下重复的变量
         # self.check_duplicate_variable , conf_dict_temp)
 
-
     # 弹出窗口选择文件夹目录
     def msg(self):
         # 默认打开/home/root/ccu/ccu_config目录
@@ -236,40 +246,21 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                                       time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
                                       ']::无法找到CCU文件夹，下个版本加入手动选择功能</font>')
             return
-
             # TODO:手动选择工作文件夹
             # folder =
             # ccu_conf_dir = folder + '/ccu_config'
             # control_agent = folder + '/control/controller_agent.cpp'
 
         self.make_tree(ccu_conf_dir)
-
-
         # 读取目录中的control_agent.cpp文件
-        # TODO:develop分支中已优化为宏定义形式需要适配
         if os.path.isfile(control_agent):
-            with open(control_agent, 'r') as f:
-                f_list = f.readlines()
-                for n in f_list:
-                    if n.count(goalString) and not n.count("//"):
-                        n = n.strip().rstrip("\");")
-                        n = n.lstrip(goalString).lstrip().lstrip("\"")
-                        goalList.append(n)
-                        n_list = n.split("\",")
-                        n_list[1] = n_list[1].lstrip().lstrip("\"")
-                        # 将需要查找的变量及对应topic 存入到相应字典里
-                        goalDict.setdefault(n_list[0], []).append(n_list[1].split())
-                f.close()
-                # 调试功能：输出本地control需要读取的配置文件名称
-                # for i in goalDict.keys():
-                #     self.textBrowser.append(str(goalDict[i]))
-                # self.textBrowser.append(str(goalDict))
-                self.textBrowser_2.append("<font color=\"#0000FF\">" +
-                                          '[' +
-                                          time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
-                                          ']::</font>' +
-                                          'controller_agent.cpp中总计参数为' + str(len(goalList))+
-                                          'controller_agent.cpp中总计Topic数目为' + str(len(goalDict)))
+            read_from_agent(control_agent)
+            self.textBrowser_2.append("<font color=\"#0000FF\">" +
+                                      '[' +
+                                      time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
+                                      ']::</font>' +
+                                      'controller_agent.cpp中总计参数为' + str(len(goalList))+
+                                      'controller_agent.cpp中总计Topic数目为' + str(len(goalDict)))
         else:
             self.textBrowser_2.append("<font color=\"#FF0000\">" +
                                       '[' +
