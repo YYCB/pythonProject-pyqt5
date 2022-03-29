@@ -97,41 +97,35 @@ class MyWindow(QMainWindow, Ui_MainWindow):
 
     # 向配置文件中添加内容
     def addIntoConf(self):
-        addDict = {'topic': '', 'variable': '', 'temp': ''}
-        addDict['topic'] = '[' + self.textEdit_3_Topic.toPlainText().upper().strip() + ']'
-        addDict['variable'] = self.textEdit_Variable.toPlainText().lower().strip()
-        addDict['temp'] = self.textEdit_2.toPlainText().strip()
-        # 更新工作区文件目录
-        self.file_checked_list_update()
+        # 将Topic转换成大写形式
+        add_dict = {'topic': '[' + self.textEdit_3_Topic.toPlainText().upper().strip() + ']',
+                   'variable': self.textEdit_Variable.toPlainText().lower().strip(),
+                   'temp': self.textEdit_2.toPlainText().strip()}
+
         # 检查所需输入是否安全
-        if not len(addDict['topic']) or not  addDict['variable'] or not addDict['temp']:
+        if not len(add_dict['topic']) or not add_dict['variable'] or not add_dict['temp']:
             self.textBrowser.append("<font color=\"#FF0000\">" +
                                     'ERROR::请将待添加的 参数列表填写完整</font>'
                                     )
             return
         elif self.radioButton_3.isChecked() and self.fontComboBox.currentText() == 'control.toml':
             self.textBrowser.append("<font color=\"#FF0000\">" +
-                                    'ERROE::Single模式请选择下方所需单独修改的control.toml文件' +
+                                    'ERROR::Single模式请选择下方所需单独修改的control.toml文件' +
                                     '</font>'
                                     )
             return
+        # 显示添加的内容
 
-        self.textBrowser.append("<font color=\"#FF0000\">" +
-                                '[' +
-                                time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
-                                ']::</font>' +
-                                'topic:' + str(addDict['topic']) + '\t'
-                                'variable:' + str(addDict['variable']) + '\t'
-                                'temp:' + str(addDict['temp'])
-                                )
         # 单个文件新加参数
         if self.radioButton_3.isChecked():
             self.textBrowser.append("<font color=\"#FF0000\">" +
                                     '[' +
                                     time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
                                     ']::</font>' + '写入到文件:' + self.fontComboBox.currentText())
-            self.add_conf_file(self.fontComboBox.currentText())
+            self.add_conf_file(self.fontComboBox.currentText(),add_dict)
         else:
+            # 更新工作区文件目录
+            self.file_checked_list_update()
             #  全部工作区内文件写入数据
             for file_dir in fileCheckedList:
                 self.textBrowser.append("<font color=\"#FF0000\">" +
@@ -139,17 +133,24 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                                         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
                                         ']::</font>' +
                                         '写入到文件:' + file_dir)
-                self.add_conf_file(file_dir)
+                self.add_conf_file(file_dir,add_dict)
 
         self.textBrowser.moveCursor(self.textBrowser.textCursor().End)
 
     # TODO:文件写入
-    def add_conf_file(self, file_path):
+    def add_conf_file(self, file_path , add_dict):
         # 读取文件参数
         conf_dict_temp = conf_dict_update(file_path)
         with open(file_path, 'r+') as f:
-            self.textBrowser.append("FFFFFF")
-        f.close()
+            self.textBrowser.append("<font color=\"#FF0000\">" +
+                                    '[' +
+                                    time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
+                                    ']::</font>' + '添加内容:'
+                                                   '[' + str(add_dict['topic']) + ']\t' +
+                                    str(add_dict['variable']) + '=' +
+                                    str(add_dict['temp'])
+                                    )
+            f.close()
 
     # check按钮触发对比检查
     def checkOnClicked(self):
@@ -158,10 +159,10 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         # 校验配置文件
         for filepath in fileCheckedList:
             self.textBrowser_2.append("<font color=\"#0000FF\">" +
-                                        '[' +
-                                        time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
-                                        ']::</font>' +
-                                        '校验文件:' + filepath)
+                                      '[' +
+                                      time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
+                                      ']::</font>' +
+                                      '校验文件:' + filepath)
             self.check_conf_file(filepath)
         # 文本框显示到底部
         self.textBrowser_2.moveCursor(self.textBrowser.textCursor().End)
