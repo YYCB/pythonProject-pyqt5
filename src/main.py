@@ -146,17 +146,12 @@ class MyWindow(QMainWindow, Ui_MainWindow):
     def add_conf_file(self, file_path, add_dict):
         # 读取文件参数
         conf_dict_temp = conf_dict_update(file_path)
+        # 检查参数是否已经存在
         if add_dict['topic'] in conf_dict_temp and add_dict['variable'] in conf_dict_temp[add_dict['topic']]:
             self.textBrowser.append('<font color=\"#FF0000\">ERROR:: 该参数已存在</font>')
 
-
-        # if add_dict[0] in conf_dict_temp and add_dict[1] in conf_dict_temp[add_dict[0]]:
-        #     self.textBrowser.append('<font color=\"#FF0000\">ERROR:: 该参数已存在</font>')
-        #     return
-
-        with open(file_path, 'r+') as f:
-
-            f.close()
+        # with open(file_path, 'r+') as f:
+        #     f.close()
 
     # check按钮触发对比检查
     def checkOnClicked(self):
