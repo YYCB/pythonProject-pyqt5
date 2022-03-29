@@ -131,7 +131,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
             self.file_checked_list_update()
             work_list = fileCheckedList
 
-        #  全部工作区内文件写入数据
+        # 写入数据
         for file_dir in work_list:
             self.textBrowser.append("<font color=\"#FF0000\">" +
                                     '[' +
@@ -145,13 +145,22 @@ class MyWindow(QMainWindow, Ui_MainWindow):
     # TODO:文件写入
     def add_conf_file(self, file_path, add_dict):
         # 读取文件参数
+        conf_dict_temp = dict()
         conf_dict_temp = conf_dict_update(file_path)
         # 检查参数是否已经存在
-        if add_dict['topic'] in conf_dict_temp and add_dict['variable'] in conf_dict_temp[add_dict['topic']]:
-            self.textBrowser.append('<font color=\"#FF0000\">ERROR:: 该参数已存在</font>')
+        if add_dict['topic'] in conf_dict_temp.keys():
+            for n in conf_dict_temp[add_dict['topic']]:
+                if add_dict['variable'] in n:
+                    self.textBrowser.append('<font color=\"#FF0000\">ERROR::</font>'+'该参数已存在')
+                return
 
-        # with open(file_path, 'r+') as f:
-        #     f.close()
+            # TODO：Topic存在时的添加
+        else:
+            with open(file_path, 'a+') as f:
+                f.writelines('['+add_dict['topic'] + ']\n' +
+                             add_dict['variable'] + ' = ' +
+                             add_dict['temp'] + '\n')
+            f.close()
 
     # check按钮触发对比检查
     def checkOnClicked(self):
