@@ -14,6 +14,8 @@ goalString = "toml::find(ctrl_config,"
 goalList = []
 goalDict = dict()
 conf_dict = dict()
+fileCheckedList = list()
+
 
 class MyWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -30,9 +32,10 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         self.fontComboBox.addItem('control.toml')
         self.fontComboBox.hide()
 
-    def radioButton_single(self):
+    # 搜寻被选中的文件并将目录寻入列表中
+    def file_checked_list_update(self):
+        fileCheckedList.clear()
         item = QtWidgets.QTreeWidgetItemIterator(self.treeWidget)
-        cnt = 0
         while item.value():
             file_dir = ccu_conf_dir
             if item.value().checkState(0) == Qt.Checked:
@@ -45,14 +48,20 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                 file_dir_list = list(reversed(file_dir_back.split(';')))
                 for f in file_dir_list:
                     file_dir += f
-                self.fontComboBox.addItem(file_dir)
+                fileCheckedList.append(file_dir)
             item.__iadd__(1)
-            cnt = cnt + 1
 
+    # 单独文件添加内容，显示所有被选中的文件并选择
+    def radioButton_single(self):
+        # 更新被选中的文件列表
+        self.file_checked_list_update()
+        for f in fileCheckedList:
+            self.fontComboBox.addItem(f)
         # 提示未选取目标文件
-        if cnt == 0:
+        if len(fileCheckedList) == 0:
             self.textBrowser.append("<font color=\"#FF0000\">" +
                                     'ERROE::请在左侧目录树中选择所需的control.toml文件' + '</font>')
+
     # 向配置文件中添加内容
     def addIntoConf(self):
         topic = '[' + self.textEdit_3_Topic.toPlainText().upper().strip() + ']'
@@ -115,70 +124,42 @@ class MyWindow(QMainWindow, Ui_MainWindow):
 
     # check按钮触发对比检查
     def checkOnClicked(self):
-        item = QtWidgets.QTreeWidgetItemIterator(self.treeWidget)
-        cnt = 0
-        # 遍历全部结点，找出选中的文件
-        while item.value():
-            file_dir = ccu_conf_dir
-            if item.value().checkState(0) == Qt.Checked:
-                check_file_parent = item.value().parent()
-                # 读取选中的配置文件路径
-                file_dir_back = ';/' + item.value().text(0)
-                while check_file_parent != self.treeWidget.topLevelItem(0):
-                    file_dir_back += ';/' + check_file_parent.text(0)
-                    check_file_parent = check_file_parent.parent()
-                file_dir_list = list(reversed(file_dir_back.split(';')))
-                for f in file_dir_list:
-                    file_dir += f
-                self.textBrowser_2.append("<font color=\"#0000FF\">" +
-                                          '[' +
-                                          time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
-                                          ']::</font>' +
-                                          file_dir)
-                # 读取选中的文件内容
-                self.textBrowser_2.append("<font color=\"#0000FF\">" +
-                                          '[' +
-                                          time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
-                                          ']::</font>' +
-                                          "开始校验")
-                self.check_conf_file(file_dir)
-                cnt = cnt + 1
-
-            item.__iadd__(1)
-        # 提示未选取目标文件
-        if cnt == 0:
-            self.textBrowser_2.append("<font color=\"#FF0000\">" +
-                                      '[' +
-                                      time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
-                                      ']::</font>' +
-                                      '请选择需要处理的control.toml文件')
-
+        # 更新被选中的文件列表
+        self.file_checked_list_update()
+        # 校验配置文件
+        for filepath in fileCheckedList:
+            self.check_conf_file(filepath)
         # 文本框显示到底部
         self.textBrowser_2.moveCursor(self.textBrowser.textCursor().End)
 
     # 校验配置文件函数
     def check_conf_file(self, file_path):
         error_cnt = 0
-
         n_temp = ''
-
+        conf_dict.clear()
         with open(file_path, 'r') as f:
-            conf_f_list = f.readlines()
+            self.textBrowser_2.append("<font color=\"#0000FF\">" +
+                                      '[' +
+                                      time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
+                                      ']::</font>' +
+                                      '开始校验：\t' + str(file_path))
             # 将配置文件中数据存入字典
-            for n in conf_f_list:
+            for n in f.readlines():
                 n = n.strip()
+                # 查找Topic
                 if n.startswith('[') and n.isupper():
                     n_temp = n.strip('[').strip(']')
                     conf_dict.setdefault(n_temp, [])
+                # 查找变量
                 elif n.find('=') != -1 and n.count('title') == 0:
                     v_temp = n.split('=', 1)[0]
                     if not v_temp.isspace():
                         conf_dict.setdefault(n_temp).append(v_temp.split())
-
             # 检查配置文件中缺少的变量
             for topic in goalDict.keys():
                 conf_key_status = conf_dict.get(topic, -1)
                 if conf_key_status == -1:
+                    error_cnt = error_cnt + 1
                     self.textBrowser_2.append("<font color=\"#FF0000\">" +
                                               "ERROR:\t 此文件缺少Topic::" +
                                               topic +
@@ -187,7 +168,6 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                                               'ERROR:\t ' + topic + '中包括：：' +
                                               str(goalDict[topic]) +
                                               '</font>')
-                    error_cnt += 1
                 else:
                     for u in goalDict[topic]:
                         if u not in conf_dict[topic]:
@@ -195,30 +175,23 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                                                       "ERROR:\tTopic  " + topic +
                                                       "缺少参数：" +
                                                       str(u))
-                            error_cnt += 1
-            # TODO::添加检查配置文件同一个topic下重复的变量
-            self.check_duplicate_variable()
+                            error_cnt = error_cnt + 1
 
-            if error_cnt:
-                self.textBrowser_2.append("<font color=\"#FF0000\">" +
-                                          "ERROR:\t error_cnt " + str(error_cnt) +
-                                          '</font>')
-            else:
-                self.textBrowser_2.append("<font color=\"#0000FF\">" +
-                                          '[' +
-                                          time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
-                                          ']::</font>' +
-                                          '校验通过！')
 
-            f.close()
+        if error_cnt ==0 :
+            self.textBrowser_2.append("<font color=\"#0000FF\">" +
+                                      '[' +
+                                      time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
+                                      ']::</font>' +
+                                      '校验通过！')
+        # TODO::添加检查配置文件同一个topic下重复的变量
+        # self.check_duplicate_variable()
+        f.close()
 
-    # 检查重复变量
+    # TODO:检查重复变量
     def check_duplicate_variable(self):
-        for topic in conf_dict:
-            # u = set(conf_dict[topic])
-            # self.textBrowser_2.append(str(set(conf_dict[topic])))
-            # u = list(conf_dict[topic])
-             print("123")
+             print("TODO：检查重复变量")
+
     # 弹出窗口选择文件夹目录
     def msg(self):
         # 默认打开/home/root/ccu/ccu_config目录
