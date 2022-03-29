@@ -35,7 +35,9 @@ def conf_dict_update(file_path):
                     conf_dict_temp.setdefault(n_temp).append(v_temp.split())
     f.close()
     return conf_dict_temp
-
+# TODO:找出重复的变量并输出
+def check_duplicate_variable(goalDict,  conf_dict_temp):
+    print('123')
 
 # TODO:检查重复变量
 def check_duplicate_variable():
@@ -93,7 +95,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         # 提示未选取目标文件
         if len(fileCheckedList) == 0:
             self.textBrowser.append("<font color=\"#FF0000\">" +
-                                    'ERROE::请在左侧目录树中选择所需的control.toml文件' + '</font>')
+                                    'ERROR::请在左侧目录树中选择所需的control.toml文件' + '</font>')
 
     # 向配置文件中添加内容
     def addIntoConf(self):
@@ -212,7 +214,8 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                                       ']::</font>' +
                                       '校验通过！')
         # TODO::添加检查配置文件同一个topic下重复的变量
-        # self.check_duplicate_variable()
+        # self.check_duplicate_variable , conf_dict_temp)
+
 
     # 弹出窗口选择文件夹目录
     def msg(self):
@@ -220,10 +223,27 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         # 避免关闭后异常退出
         goalDict.clear()
         goalList.clear()
-        # 弹出窗口选择文件夹目录
+        # 弹出窗口选择文件夹目录，设置工作目录
         if os.path.isdir(ccu_conf_dir):
             self.pushButton.setText(ccu_conf_dir)
-            self.make_tree(ccu_conf_dir)
+        else:
+            self.textBrowser_2.append("<font color=\"#0000FF\">" +
+                                      '[' +
+                                      time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
+                                      ']::无法找到CCU文件夹，下个版本加入手动选择功能</font>')
+            self.textBrowser.append("<font color=\"#0000FF\">" +
+                                      '[' +
+                                      time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
+                                      ']::无法找到CCU文件夹，下个版本加入手动选择功能</font>')
+            return
+
+            # TODO:手动选择工作文件夹
+            # folder =
+            # ccu_conf_dir = folder + '/ccu_config'
+            # control_agent = folder + '/control/controller_agent.cpp'
+
+        self.make_tree(ccu_conf_dir)
+
 
         # 读取目录中的control_agent.cpp文件
         # TODO:develop分支中已优化为宏定义形式需要适配
@@ -248,7 +268,8 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                                           '[' +
                                           time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
                                           ']::</font>' +
-                                          'controller_agent.cpp中总计参数为' + str(len(goalList)))
+                                          'controller_agent.cpp中总计参数为' + str(len(goalList))+
+                                          'controller_agent.cpp中总计Topic数目为' + str(len(goalDict)))
         else:
             self.textBrowser_2.append("<font color=\"#FF0000\">" +
                                       '[' +
